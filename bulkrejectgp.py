@@ -4,6 +4,7 @@ from marionette_driver.marionette import Marionette
 from marionette_driver import By, Wait
 import subprocess
 import argparse
+from urllib.parse import quote_plus
 
 def sendmessage(title, message):
     subprocess.Popen(['notify-send', title, message])
@@ -77,7 +78,8 @@ except:
     print "Already logged"
 # Move to the term
 term = args.search
-term = term.replace(' ', '+')
+# encode the term and change the space ('%20') in a '+'
+term = quote_plus(term, safe='')
 client.navigate("https://translate.wordpress.org/consistency?search=" + term + "&set=" + args.lang + "%2Fdefault")
 # Remove the strings different from our
 removeOtherStrings = "var right = document.querySelectorAll('table td:nth-child(2) .string');for (var i=0; i<right.length; i++){if(right[i].innerHTML!=='" + args.remove.replace("'","\\'") + "') {td = right[i].parentNode;tr = td.parentNode;tr.outerHTML=''}}"
